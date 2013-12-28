@@ -100,8 +100,9 @@ public class Simulator {
             for (Object object : objects) {
                 calculateVelocity(i, object);
                 calculatePosition(i, object);
-                System.out.println(String.format("[%s's status at %f seconds] Location: (%f,%f), Velocity: %f m/s %s",
+                System.out.println(String.format("[%s (%f kg)'s status at %f seconds] Location: (%f,%f), Velocity: %f m/s %s",
                         object.getName(),
+                        object.getMass(),
                         i,
                         object.getXPosition(),
                         object.getYPosition(),
