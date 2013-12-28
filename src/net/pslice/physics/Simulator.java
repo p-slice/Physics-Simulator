@@ -16,6 +16,7 @@ public class Simulator {
         mass1.addForce(new Force("Force 2", -3, -6));
 
         simulator.addObject(mass1);
+        simulator.addObject(new Object("Mass 2", 5, 0, 3, 7, 2));
         simulator.run(0, 5, 0.5);
     }
 
@@ -96,28 +97,41 @@ public class Simulator {
                 calculateVelocity(a, object);
                 calculatePosition(a, object);
             }
-        for (double i = startTime; i <= endTime; i+=interval)
-            for (Object object : objects) {
+        for (Object object : objects) {
+            printObjectInfo(object);
+            for (double i = startTime; i <= endTime; i += interval) {
                 calculateVelocity(i, object);
                 calculatePosition(i, object);
-                System.out.println(String.format("[%s (%f kg)'s status at %f seconds] Location: (%f,%f), Velocity: %f m/s %s",
-                        object.getName(),
-                        object.getMass(),
-                        i,
-                        object.getXPosition(),
-                        object.getYPosition(),
-                        Math.hypot(object.getXVelocity(), object.getYVelocity()),
-                        getObjectAngle(object)));
+                System.out.println("["
+                        + object.getName() + " at "
+                        + String.valueOf(i).replaceAll("\\.0\\b", "") + " seconds] Location: ("
+                        + String.valueOf(object.getXPosition()).replaceAll("\\.0\\b", "") + ", "
+                        + String.valueOf(object.getYPosition()).replaceAll("\\.0\\b", "") + "), Velocity: "
+                        + String.valueOf(Math.hypot(object.getXVelocity(), object.getYVelocity())).replaceAll("\\.0\\b", "") + " m/s "
+                        + getObjectAngle(object));
             }
+        }
         System.out.println("Finished simulating!");
     }
 
-
+    /*
+    ** Method to print general info about the object:
+     */
+    public static void printObjectInfo(Object object) {
+        System.out.println("=========================");
+        System.out.println("Object: " + object.getName());
+        System.out.println("Mass: " + String.valueOf(object.getMass()).replaceAll("\\.0\\b", "") + " kg");
+        System.out.println("Initial X Coordinate: " + String.valueOf(object.getInitialXPosition()).replaceAll("\\.0\\b", ""));
+        System.out.println("Initial Y Coordinate: " + String.valueOf(object.getInitialYPosition()).replaceAll("\\.0\\b", ""));
+        System.out.println("Initial X Velocity: " + String.valueOf(object.getInitialXVelocity()).replaceAll("\\.0\\b", "") + " m/s");
+        System.out.println("Initial Y Velocity: " + String.valueOf(object.getInitialYVelocity()).replaceAll("\\.0\\b", "") + " m/s");
+        System.out.println("=========================");
+    }
 
     /*
     ** Method to run all position calculations:
      */
-    private void calculatePosition(double time, Object object) {
+    private static void calculatePosition(double time, Object object) {
         object.setXPositionAt(time, object.getInitialXPosition() + (float)(object.getXVelocityAt(time) * time));
         object.setYPositionAt(time, object.getInitialYPosition() + (float)(object.getYVelocityAt(time) * time));
     }
@@ -125,7 +139,7 @@ public class Simulator {
     /*
     ** Method to run all velocity calculations:
      */
-    private void calculateVelocity(double time, Object object) {
+    private static void calculateVelocity(double time, Object object) {
         double totalXMagnitude = 0;
         double totalYMagnitude = 0;
 
@@ -161,13 +175,13 @@ public class Simulator {
         double angle =  Math.toDegrees(Math.atan(object.getYVelocity() / object.getXVelocity()));
 
         if (angle > 0 && angle < 90 && object.getXVelocity() > 0)
-            return "at " + String.valueOf(angle).substring(0, 6) + " degrees N of E";
+            return "at " + String.valueOf(angle).substring(0, 6).replaceAll("\\.0\\b", "") + " degrees N of E";
         if (angle > 0 && angle < 90 && object.getXVelocity() < 0)
-            return "at " + String.valueOf(angle).substring(0, 6) + " degrees S of W";
+            return "at " + String.valueOf(angle).substring(0, 6).replaceAll("\\.0\\b", "") + " degrees S of W";
         if (angle > -90 && angle < 0 && object.getXVelocity() > 0)
-            return "at " + String.valueOf(-angle).substring(0, 6) + " degrees S of E";
+            return "at " + String.valueOf(-angle).substring(0, 6).replaceAll("\\.0\\b", "") + " degrees S of E";
         if (angle > -90 && angle < 0 && object.getXVelocity() < 0)
-            return "at " + String.valueOf(-angle).substring(0, 6) + " degrees N of W";
+            return "at " + String.valueOf(-angle).substring(0, 6).replaceAll("\\.0\\b", "") + " degrees N of W";
         return "[Error calculating angle]";
     }
 }
