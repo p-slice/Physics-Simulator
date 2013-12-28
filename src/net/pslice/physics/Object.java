@@ -262,7 +262,6 @@ public class Object {
     ** Getters for X and Y positions at a given time:
      */
     public float getXPositionAt(double time) {
-        System.out.println("Trying to get " + time);
         return timeXPositions.get(time);
     }
     public float getYPositionAt(double time) {
