@@ -12,11 +12,11 @@ public class Simulator {
     {
         Simulator simulator = new Simulator();
 
-        Object mass1 = new Object("Mass 1", 10);
-        mass1.addForce(new Force("Force 1", 5, 45));
+        Object mass1 = new Object("Mass 1", 1);
+        mass1.addForce(new Force("Force 1", 5, -45));
 
         simulator.addObject(mass1);
-        simulator.run(0, 5, 0.25);
+        simulator.run(0, 5, 0.5);
     }
 
     /*
@@ -31,6 +31,10 @@ public class Simulator {
     // Number used as the bottom interval in simulating
     // (Warning: Making this too big could cause the simulation to get very slow)
     private static final int baseInterval = 100;
+
+    // Number of digits used after a decimal point
+    // (Warning: Making this too small could make data difficult to interpret
+    private static final int digits = 4;
 
 
 
@@ -125,9 +129,9 @@ public class Simulator {
     // Method requiring the start and end times, and interval of the simulation
     public void run(double start, double end, double interval) {
 
-        if (interval < 0.01)
+        if (interval * baseInterval < 1)
         {
-            System.out.println("Error: The interval must be greater than 0.01 seconds!");
+            System.out.println("Error: The interval must be greater than " + (1/(double)baseInterval) + " seconds!");
             return;
         }
 
@@ -225,6 +229,8 @@ public class Simulator {
             totalYMagnitude += force.getYMagnitude();
         }
 
+        System.out.println(totalYMagnitude);
+
         double xVelocity = object.getInitialXVelocity() + ((totalXMagnitude / object.getMass()) * ((double)time/baseInterval));
         double yVelocity = object.getInitialYVelocity() + ((totalYMagnitude / object.getMass()) * ((double)time/baseInterval));
 
@@ -276,8 +282,11 @@ public class Simulator {
     // Method to clean up decimals in doubles
     private static String cleanDecimal(double number)
     {
-        if (Double.toString(number).toCharArray().length > 4)
-            number = Double.parseDouble(Double.toString(number).substring(0, 4));
+        if (Double.toString(number).split("[.]")[1].toCharArray().length > digits)
+        {
+            String[] parts = Double.toString(number).split("[.]");
+            number = Double.parseDouble(parts[0] + "." + parts[1].substring(0, digits));
+        }
         return String.valueOf(number).replaceAll("\\.0\\b", "");
     }
 }

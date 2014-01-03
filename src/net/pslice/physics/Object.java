@@ -190,20 +190,20 @@ public class Object {
     // Setter for the X coordinate of the object
     public void setXPosition(int time, float xPosition)
     {
-        xPositions.put(time, initialXPosition + xPosition);
+        xPositions.put(time, xPosition);
     }
 
     // Setter for the Y coordinate of the object
     public void setYPosition(int time, float yPosition)
     {
-        yPositions.put(time, initialYPosition + yPosition);
+        yPositions.put(time, yPosition);
     }
 
     // Setter for both coordinates of the object
     public void setPosition(int time, float xPosition, float yPosition)
     {
-        xPositions.put(time, initialXPosition + xPosition);
-        yPositions.put(time, initialYPosition + yPosition);
+        xPositions.put(time, xPosition);
+        yPositions.put(time, yPosition);
     }
 
     // Getter for the X coordinate of the object
